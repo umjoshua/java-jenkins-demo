@@ -17,5 +17,13 @@ pipeline {
                 deploy adapters: [tomcat8(credentialsId: '4b9202af-f3fc-449f-ab1d-563552e1c285', path: '', url: 'http://localhost:9090')], contextPath: '/', war: '**/*.war'
             }
         }
+        stage('production'){
+            steps{
+                timeout(time: 5, unit: 'DAYS') {
+                    input message: "Approve to production?"
+                }
+                deploy adapters: [tomcat8(credentialsId: '4b9202af-f3fc-449f-ab1d-563552e1c285', path: '', url: 'http://localhost:9091')], contextPath: '/', war: '**/*.war'
+            }
+        }
     }
 }
