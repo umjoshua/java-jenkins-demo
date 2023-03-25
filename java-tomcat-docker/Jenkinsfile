@@ -1,0 +1,21 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                sh 'mvn -f java-tomcat-docker/pom.xml clean package'
+            }
+            post{
+                success{
+                    archiveArtifacts artifacts: '**/*.war', followSymlinks: false
+                }
+            }
+        }
+        stage('create docker image'){
+            steps{
+                sh "docker build -t . tomcatsample:${env.BUILD_ID}"
+            }
+        }
+    }
+}
